@@ -69,8 +69,24 @@ public class MainController {
     }
 
     @PostMapping("/api/events")
-    public String createNewEvent(@RequestBody String json){
-        return null;
+    public String createNewEvent(@RequestParam(value = "name") String name,
+                                 @RequestParam(value = "location") String location,
+                                 @RequestParam(value = "description") String description){
+        if(name == null){ throw new BadRequestException("Event name cannot be null"); }
+        if(location == null){ throw new BadRequestException("Event location cannot be null"); }
+//        if(date == null){ throw new BadRequestException("Event date cannot be null"); }
+        //TODO: Pull the user from the session
+        //THIS IS A PLACEHOLDER FOR NOW
+        User admin = users.findAll().get(0);
+        //TODO: Test with front-end form to get Data object working
+        Event newEvent = new Event(admin, name, location, description, new Date(), Status.NEW);
+        newEvent = events.save(newEvent);
+        Response res = new Response<Event>(newEvent);
+        try {
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e) {
+            throw new InternalServerErrorException("Error in processing response as a JSON");
+        }
     }
 
     @GetMapping("/api/events/{eventId}")
