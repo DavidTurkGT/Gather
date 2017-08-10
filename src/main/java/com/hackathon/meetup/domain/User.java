@@ -1,6 +1,6 @@
 package com.hackathon.meetup.domain;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -89,7 +89,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-         this.password =   bCryptPassword(password);
+         this.password =   password;
     }
 
     public String getEmail() {
@@ -118,11 +118,11 @@ public class User {
 
 
 
-    public String bCryptPassword(String password){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-        return hashedPassword;
-    }
+//    public String bCryptPassword(String password){
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String hashedPassword = passwordEncoder.encode(password);
+//        return hashedPassword;
+//    }
 
     @Override
     public boolean equals(Object o) {
