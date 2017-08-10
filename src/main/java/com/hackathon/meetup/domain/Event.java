@@ -1,5 +1,7 @@
 package com.hackathon.meetup.domain;
 
+import com.sun.istack.internal.Nullable;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,19 +22,19 @@ public class Event {
     @OneToOne
     private User admin;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private  String location;
 
     @Column
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private Date date;
 
-    @Column
+    @Column(nullable = false)
     private Status status;
 
     public Event() {

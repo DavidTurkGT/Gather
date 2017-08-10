@@ -2,6 +2,7 @@ package com.hackathon.meetup.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackathon.meetup.containers.NewEvent;
 import com.hackathon.meetup.domain.Event;
 import com.hackathon.meetup.domain.Response;
 import com.hackathon.meetup.domain.Status;
@@ -75,20 +76,23 @@ public class MainController {
     }
 
     @PostMapping("/api/events")
-    public String createNewEvent(@RequestParam(value = "name") String name,
-                                 @RequestParam(value = "location") String location,
-                                 @RequestParam(value = "description") String description,
+    public String createNewEvent(@RequestBody NewEvent eventContainer,
                                  HttpSession session){
         //TODO: Remove this when a session can be created
-        session.setAttribute("userId", 5);
-        //TODO: Check that the user is an admin
-        if(name == null){ throw new BadRequestException("Event name cannot be null"); }
-        if(location == null){ throw new BadRequestException("Event location cannot be null"); }
+        session.setAttribute("userId", 6);
 //        if(date == null){ throw new BadRequestException("Event date cannot be null"); }
         User user = users.findOne((int) session.getAttribute("userId"));
         if(!user.isAdmin()){ throw new UnauthorizedException("User does not have admin privileges"); }
         //TODO: Test with front-end form to get Data object working
-        Event newEvent = new Event(user, name, location, description, new Date(), Status.NEW);
+        Event newEvent = new Event();
+        newEvent.setAdmin(user);
+        if(eventContainer.getName() == null){ throw new BadRequestException("Name cannot be null"); }
+        newEvent.setName(eventContainer.getName());
+        if(eventContainer.getLocation() == null){ throw new BadRequestException("Location cannot be null"); }
+        newEvent.setLocation(eventContainer.getLocation());
+        newEvent.setDescription(eventContainer.getDescription());
+        newEvent.setDate(new Date()); //TODO: work with the front-end to get a real date
+        newEvent.setStatus(Status.NEW);
         newEvent = events.save(newEvent);
         Response res = new Response<Event>(newEvent);
         try {
@@ -116,8 +120,26 @@ public class MainController {
     public String modifyEvent(@PathVariable int eventId,
                               @RequestParam(value = "name") String name,
                               @RequestParam(value = "location") String location,
-                              @RequestParam(value = "description") String description){
-        return null;
+                              @RequestParam(value = "description") String description,
+                              HttpSession session){
+        //TODO: Remove this when session is working
+        session.setAttribute("userId", 4);
+        Event event = events.findOne(eventId);
+        if(event == null){ throw new ContentNotFoundException("No event matching ID"); }
+        if(event.getAdmin().getUserid() != (int) session.getAttribute("userId")){
+            throw new UnauthorizedException("Only the creator of an event may modify the event");
+        }
+        if(name == null){ throw new BadRequestException("Name cannot be null"); }
+        if(location == null){ throw new BadRequestException("Location cannot be null"); }
+        Event modifiedEvent = new Event(event.getAdmin(), name, location, description, new Date(), event.getStatus());
+        modifiedEvent.setEventId(event.getEventId());
+        modifiedEvent = events.save(modifiedEvent);
+        try{
+            Response res = new Response<Event>(modifiedEvent);
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e){
+            throw new InternalServerErrorException("Error processing response to JSON");
+        }
     }
 
     @DeleteMapping("/api/events/{eventId}")
