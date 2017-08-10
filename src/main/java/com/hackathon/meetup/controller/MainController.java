@@ -15,6 +15,7 @@ import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -71,13 +72,14 @@ public class MainController {
     @PostMapping("/api/events")
     public String createNewEvent(@RequestParam(value = "name") String name,
                                  @RequestParam(value = "location") String location,
-                                 @RequestParam(value = "description") String description){
+                                 @RequestParam(value = "description") String description,
+                                 HttpSession session){
+        //TODO: Remove this when a session can be created
+        session.setAttribute("userId", 2);
         if(name == null){ throw new BadRequestException("Event name cannot be null"); }
         if(location == null){ throw new BadRequestException("Event location cannot be null"); }
 //        if(date == null){ throw new BadRequestException("Event date cannot be null"); }
-        //TODO: Pull the user from the session
-        //THIS IS A PLACEHOLDER FOR NOW
-        User admin = users.findAll().get(0);
+        User admin = users.findOne((int) session.getAttribute("userId"));
         //TODO: Test with front-end form to get Data object working
         Event newEvent = new Event(admin, name, location, description, new Date(), Status.NEW);
         newEvent = events.save(newEvent);
