@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.meetup.domain.Event;
 import com.hackathon.meetup.domain.Status;
 import com.hackathon.meetup.domain.User;
+import com.hackathon.meetup.exceptions.ContentNotFoundException;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
 import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class MainController {
         Event testEvent = events.findAll().get(0);
         System.out.println("Event: " + testEvent);
     }
-    
+
     @Autowired
     UserService userService;
 
@@ -146,27 +148,31 @@ public class MainController {
      */
     @PostMapping("/api/notes/{userId}")
     public String createNote(@PathVariable int userId){
-        return NotesController.createNote(userId);
+        User user = users.findOne(userId);
+        if(user == null){
+            throw new ContentNotFoundException("User not found");
+        }
+        return "Creating the event";
     }
 
     @GetMapping("/api/notes/{noteId}")
     public String getNoteById(@PathVariable int noteId){
-        return NotesController.getNoteById(noteId);
+        return null;
     }
 
     @PutMapping("/api/notes/{noteId}")
     public String updateNote(@PathVariable int noteId){
-        return NotesController.updateNote(noteId);
+        return null;
     }
 
     @DeleteMapping("/api/notes/{noteId}")
     public String deleteNote(@PathVariable int noteId){
-        return NotesController.deleteNote(noteId);
+        return null;
     }
 
     @GetMapping("/api/notes/all/{userId}")
     public String getAllNotes(@PathVariable int userId){
-        return NotesController.getAllNotes(userId);
+        return null;
     }
 
     private ObjectMapper objectMapper = new ObjectMapper();

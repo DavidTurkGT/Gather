@@ -18,5 +18,10 @@ public class UserServiceImpl implements UserService {
     public User addUser(User newUser) {
         return userRepo.save( newUser );
     }
+
+    @Override
+    public User findById(int id) {
+        return userRepo.findOne(id);
+    }
 }
 
