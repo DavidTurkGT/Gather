@@ -1,34 +1,18 @@
 package com.hackathon.meetup.controller;
 
-<<<<<<< HEAD
 import com.fasterxml.jackson.databind.ObjectMapper;
-=======
->>>>>>> origin/master
 import com.hackathon.meetup.domain.Event;
 import com.hackathon.meetup.domain.Status;
 import com.hackathon.meetup.domain.User;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
-<<<<<<< HEAD
 import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
 
-=======
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.List;
->>>>>>> origin/master
 
 @RestController
 public class MainController {
@@ -55,19 +39,13 @@ public class MainController {
         System.out.println("Event: " + testEvent);
     }
 
-<<<<<<< HEAD
-
     @Autowired
     UserService userService;
 
-=======
-   
->>>>>>> origin/master
     @GetMapping("/")
     public String index(){
         return "You made it!";
     }
-<<<<<<< HEAD
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -77,12 +55,5 @@ public class MainController {
         return userService.addUser( user );
     }
 
-
-
 }
 
-
-=======
-}
-
->>>>>>> origin/master
