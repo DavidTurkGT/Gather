@@ -1,7 +1,9 @@
 package com.hackathon.meetup.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by David Turk on 8/8/17.

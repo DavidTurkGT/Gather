@@ -9,6 +9,7 @@ import com.hackathon.meetup.domain.User;
 import com.hackathon.meetup.exceptions.BadRequestException;
 import com.hackathon.meetup.exceptions.ContentNotFoundException;
 import com.hackathon.meetup.exceptions.InternalServerErrorException;
+import com.hackathon.meetup.exceptions.UnauthorizedException;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
 import com.hackathon.meetup.service.UserService;
@@ -34,10 +35,14 @@ public class MainController {
     @PostConstruct
     public void init(){
         if(users.count() == 0){
-            User testUser = new User("David","Turk","dtgt","pass","test@test.org","8675309",true);
+            User testAdmin = new User("David","Turk","dtgt","pass","test@test.org","8675309",true);
+            users.save(testAdmin);
+            User testUser = new User("Cornbread", "Cat", "corn", "cat", "meow@cat.com", "8675309", false);
             users.save(testUser);
         }
-        User testUser = users.findAll().get(0);
+        User testAdmin = users.findAll().get(0);
+        System.out.println("Admin: " + testAdmin);
+        User testUser = users.findAll().get(1);
         System.out.println("User: " + testUser);
         if(events.count() == 0){
             Event newEvent = new Event(testUser, "Test Event", "Moon","Creating things", new Date(), Status.NEW);
@@ -75,13 +80,15 @@ public class MainController {
                                  @RequestParam(value = "description") String description,
                                  HttpSession session){
         //TODO: Remove this when a session can be created
-        session.setAttribute("userId", 2);
+        session.setAttribute("userId", 5);
+        //TODO: Check that the user is an admin
         if(name == null){ throw new BadRequestException("Event name cannot be null"); }
         if(location == null){ throw new BadRequestException("Event location cannot be null"); }
 //        if(date == null){ throw new BadRequestException("Event date cannot be null"); }
-        User admin = users.findOne((int) session.getAttribute("userId"));
+        User user = users.findOne((int) session.getAttribute("userId"));
+        if(!user.isAdmin()){ throw new UnauthorizedException("User does not have admin privileges"); }
         //TODO: Test with front-end form to get Data object working
-        Event newEvent = new Event(admin, name, location, description, new Date(), Status.NEW);
+        Event newEvent = new Event(user, name, location, description, new Date(), Status.NEW);
         newEvent = events.save(newEvent);
         Response res = new Response<Event>(newEvent);
         try {
@@ -95,7 +102,7 @@ public class MainController {
     public String getEventById(@PathVariable int eventId){
         Event event = events.findOne(eventId);
         if(event == null){
-            throw new ContentNotFoundException("Not event matching ID");
+            throw new ContentNotFoundException("No event matching ID");
         }
         try{
             Response res = new Response<Event>(event);
@@ -106,7 +113,10 @@ public class MainController {
     }
 
     @PutMapping("/api/events/{eventId}")
-    public String modifyEvent(@PathVariable int eventId){
+    public String modifyEvent(@PathVariable int eventId,
+                              @RequestParam(value = "name") String name,
+                              @RequestParam(value = "location") String location,
+                              @RequestParam(value = "description") String description){
         return null;
     }
 
