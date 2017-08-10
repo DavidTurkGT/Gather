@@ -1,23 +1,28 @@
 package com.hackathon.meetup.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.meetup.domain.Event;
+import com.hackathon.meetup.domain.Response;
 import com.hackathon.meetup.domain.Status;
 import com.hackathon.meetup.domain.User;
+import com.hackathon.meetup.exceptions.BadRequestException;
 import com.hackathon.meetup.exceptions.ContentNotFoundException;
+import com.hackathon.meetup.exceptions.InternalServerErrorException;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
 import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 
 @RestController
 public class MainController {
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     UserRepo users;
@@ -54,17 +59,32 @@ public class MainController {
      */
     @GetMapping("/api/events")
     public String getAllEvents(){
-        return null;
+        try {
+            List<Event> allEvents = events.findAll();
+            Response res = new Response<List>(allEvents);
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e) {
+            throw new InternalServerErrorException("Error in processing to JSON");
+        }
     }
 
     @PostMapping("/api/events")
-    public String createNewEvent(){
+    public String createNewEvent(@RequestBody String json){
         return null;
     }
 
     @GetMapping("/api/events/{eventId}")
     public String getEventById(@PathVariable int eventId){
-        return null;
+        Event event = events.findOne(eventId);
+        if(event == null){
+            throw new ContentNotFoundException("Not event matching ID");
+        }
+        try{
+            Response res = new Response<Event>(event);
+            return objectMapper.writeValueAsString(res);
+        } catch( JsonProcessingException e){
+            throw new InternalServerErrorException("Error in processing to JSON");
+        }
     }
 
     @PutMapping("/api/events/{eventId}")
@@ -171,12 +191,16 @@ public class MainController {
         return null;
     }
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+
 
     @PostMapping("/api/register")
-    public User register(@RequestBody String json) throws IOException{
-        User user = objectMapper.readValue( json, User.class );
-        return userService.addUser( user );
+    public User register(@RequestBody String json){
+        try{
+            User user = objectMapper.readValue( json, User.class );
+            return userService.addUser( user );
+        } catch (IOException e){
+            throw new BadRequestException("JSON did not match data for a user");
+        }
     }
 
 }
