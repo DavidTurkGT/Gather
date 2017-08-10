@@ -1,16 +1,18 @@
 package com.hackathon.meetup.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.meetup.domain.Event;
 import com.hackathon.meetup.domain.Status;
 import com.hackathon.meetup.domain.User;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
+import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+
 
 @RestController
 public class MainController {
@@ -36,6 +38,9 @@ public class MainController {
         Event testEvent = events.findAll().get(0);
         System.out.println("Event: " + testEvent);
     }
+    
+    @Autowired
+    UserService userService;
 
     @GetMapping("/")
     public String index(){
@@ -163,5 +168,14 @@ public class MainController {
     public String getAllNotes(@PathVariable int userId){
         return NotesController.getAllNotes(userId);
     }
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @PostMapping("/api/register")
+    public User register(@RequestBody String json) throws IOException{
+        User user = objectMapper.readValue( json, User.class );
+        return userService.addUser( user );
+    }
+
 }
 
