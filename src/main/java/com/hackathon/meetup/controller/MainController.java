@@ -1,18 +1,15 @@
 package com.hackathon.meetup.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.meetup.domain.Event;
 import com.hackathon.meetup.domain.Status;
 import com.hackathon.meetup.domain.User;
-import com.hackathon.meetup.exceptions.ContentNotFoundException;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
 import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.Date;
 
 
@@ -97,7 +94,6 @@ public class MainController {
      */
     @GetMapping("/api/users/{userId}")
     public String getUserById(@PathVariable int userId){
-        return null;
     }
 
     @PostMapping("/api/users/block/{userId}")
