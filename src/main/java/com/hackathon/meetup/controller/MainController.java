@@ -118,20 +118,18 @@ public class MainController {
 
     @PutMapping("/api/events/{eventId}")
     public String modifyEvent(@PathVariable int eventId,
-                              @RequestParam(value = "name") String name,
-                              @RequestParam(value = "location") String location,
-                              @RequestParam(value = "description") String description,
+                              @RequestBody NewEvent reqEvent,
                               HttpSession session){
         //TODO: Remove this when session is working
-        session.setAttribute("userId", 4);
+        session.setAttribute("userId", 7);
         Event event = events.findOne(eventId);
         if(event == null){ throw new ContentNotFoundException("No event matching ID"); }
         if(event.getAdmin().getUserid() != (int) session.getAttribute("userId")){
             throw new UnauthorizedException("Only the creator of an event may modify the event");
         }
-        if(name == null){ throw new BadRequestException("Name cannot be null"); }
-        if(location == null){ throw new BadRequestException("Location cannot be null"); }
-        Event modifiedEvent = new Event(event.getAdmin(), name, location, description, new Date(), event.getStatus());
+        if(reqEvent.getName() == null){ throw new BadRequestException("Name cannot be null"); }
+        if(reqEvent.getLocation() == null){ throw new BadRequestException("Location cannot be null"); }
+        Event modifiedEvent = new Event(event.getAdmin(), reqEvent.getName(), reqEvent.getLocation(), reqEvent.getDescription(), new Date(), event.getStatus());
         modifiedEvent.setEventId(event.getEventId());
         modifiedEvent = events.save(modifiedEvent);
         try{
