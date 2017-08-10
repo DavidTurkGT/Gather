@@ -54,42 +54,42 @@ public class MainController {
      */
     @GetMapping("/api/events")
     public String getAllEvents(){
-        return EventsController.getAllEvents();
+        return null;
     }
 
     @PostMapping("/api/events")
     public String createNewEvent(){
-        return EventsController.createNewEvent();
+        return null;
     }
 
     @GetMapping("/api/events/{eventId}")
     public String getEventById(@PathVariable int eventId){
-        return EventsController.getEventById(eventId);
+        return null;
     }
 
     @PutMapping("/api/events/{eventId}")
     public String modifyEvent(@PathVariable int eventId){
-        return EventsController.modifyEvent(eventId);
+        return null;
     }
 
     @DeleteMapping("/api/events/{eventId}")
     public String deleteEvent(@PathVariable int eventId){
-        return EventsController.deleteEvent(eventId);
+        return null;
     }
 
     @PostMapping("/api/events/{eventId}/start")
     public String startEvent(@PathVariable int eventId){
-        return EventsController.startEvent(eventId);
+        return null;
     }
 
     @PostMapping("/api/events/{eventId}/stop")
     public String stopEvent(@PathVariable int eventId){
-        return EventsController.stopEvent(eventId);
+        return null;
     }
 
     @PostMapping("/api/events/{eventId}/rsvp")
     public String rsvp(@PathVariable int eventId){
-        return EventsController.rsvp(eventId);
+        return null;
     }
 
     /**
@@ -97,12 +97,12 @@ public class MainController {
      */
     @GetMapping("/api/users/{userId}")
     public String getUserById(@PathVariable int userId){
-        return UserController.getUserById(userId);
+        return null;
     }
 
     @PostMapping("/api/users/block/{userId}")
     public String blockUser(@PathVariable int userId){
-        return UserController.blockUser(userId);
+        return null;
     }
 
     /**
@@ -110,37 +110,37 @@ public class MainController {
      */
     @GetMapping("/api/acquaintances/{userId}")
     public String getAcquaintances(@PathVariable int userId){
-        return AcquaintanceController.getAcquaintances(userId);
+        return null;
     }
 
     @DeleteMapping("/api/acquaintances/{acqId}")
     public String deleteAcquaintance(@PathVariable int acqId){
-        return AcquaintanceController.deleteAcquaintances(acqId);
+        return null;
     }
 
     @PostMapping("/api/acquaintances/request/{userId}")
     public String requestAcquaintance(@PathVariable int userId){
-        return AcquaintanceController.requestAcquaintance(userId);
+        return null;
     }
 
     @GetMapping("/api/acquaintances/request/{userId}/incoming")
     public String getIncomingRequests(@PathVariable int userId){
-        return AcquaintanceController.getIncomingRequests(userId);
+        return null;
     }
 
     @GetMapping("/api/acquaintances/request/{userId}/outgoing")
     public String getOutgoingRequests(@PathVariable int userId){
-        return AcquaintanceController.getOutgoingRequests(userId);
+        return null;
     }
 
     @PostMapping("/api/acquaintances/request/accept/{reqId}")
     public String acceptRequest(@PathVariable int reqId){
-        return AcquaintanceController.acceptRequest(reqId);
+        return null;
     }
 
     @DeleteMapping("/api/acquaintances/request/{reqId}")
     public String deleteRequest(@PathVariable int reqId){
-        return AcquaintanceController.deleteAcquaintances(reqId);
+        return null;
     }
 
     /**
@@ -148,11 +148,7 @@ public class MainController {
      */
     @PostMapping("/api/notes/{userId}")
     public String createNote(@PathVariable int userId){
-        User user = users.findOne(userId);
-        if(user == null){
-            throw new ContentNotFoundException("User not found");
-        }
-        return "Creating the event";
+        return null;
     }
 
     @GetMapping("/api/notes/{noteId}")
