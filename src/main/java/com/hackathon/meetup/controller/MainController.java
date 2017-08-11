@@ -100,6 +100,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/api/events/{eventId}")
     public String getEventById(@PathVariable int eventId){
         Event event = events.findOne(eventId);
@@ -161,9 +162,17 @@ public class MainController {
     /**
      * Users endpoints
      */
+    @CrossOrigin
     @GetMapping("/api/users/{userId}")
     public String getUserById(@PathVariable int userId){
-        return "ok";
+        User user = users.findOne(userId);
+        if(user == null) { throw new ContentNotFoundException("No user matching provided ID"); }
+        Response res = new Response<User>(user);
+        try{
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e){
+            throw new InternalServerErrorException("Error in processing response to JSON");
+        }
     }
 
     @PostMapping("/api/users/block/{userId}")
@@ -174,6 +183,7 @@ public class MainController {
     /**
      * Acquaintances endpoints
      */
+    @CrossOrigin
     @GetMapping("/api/acquaintances/{userId}")
     public String getAcquaintances(@PathVariable int userId){
         return null;
@@ -189,11 +199,13 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @GetMapping("/api/acquaintances/request/{userId}/incoming")
     public String getIncomingRequests(@PathVariable int userId){
         return null;
     }
 
+    @CrossOrigin
     @GetMapping("/api/acquaintances/request/{userId}/outgoing")
     public String getOutgoingRequests(@PathVariable int userId){
         return null;
@@ -217,6 +229,7 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @GetMapping("/api/notes/{noteId}")
     public String getNoteById(@PathVariable int noteId){
         return null;
@@ -232,6 +245,7 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @GetMapping("/api/notes/all/{userId}")
     public String getAllNotes(@PathVariable int userId){
         return null;
