@@ -1,5 +1,6 @@
 package com.hackathon.meetup.controller;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.meetup.containers.NewEvent;
@@ -16,9 +17,9 @@ import com.hackathon.meetup.repository.UserRepo;
 import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -165,7 +166,7 @@ public class MainController {
      */
     @GetMapping("/api/users/{userId}")
     public String getUserById(@PathVariable int userId){
-        return null;
+        return "ok";
     }
 
     @PostMapping("/api/users/block/{userId}")
@@ -240,16 +241,40 @@ public class MainController {
     }
 
 
-
     @PostMapping("/api/register")
-    public User register(@RequestBody String json){
-        try{
-            User user = objectMapper.readValue( json, User.class );
-            return userService.addUser( user );
-        } catch (IOException e){
-            throw new BadRequestException("JSON did not match data for a user");
+    public String register(@RequestParam(value="firstname") String firstname,
+                           @RequestParam(value="lastname") String lastname,
+                           @RequestParam(value="username") String username,
+                           @RequestParam(value="password") String password,
+                           @RequestParam(value="email") String email,
+                           @RequestParam(value="phone") String phone,
+                           @RequestParam(value="isAdmin") boolean isAdmin){
+        if(firstname == null){ throw new BadRequestException("First Name cannot be null"); }
+        if(lastname == null){ throw new BadRequestException("Last Name cannot be null"); }
+        if(username == null){ throw new BadRequestException("User Name cannot be null"); }
+        if(password == null){ throw new BadRequestException("Password cannot be null"); }
+        if(phone == null){ throw new BadRequestException("Phone cannot be null"); }
+
+        User newUser = new User(firstname, lastname, username, password, email, phone, isAdmin);
+        newUser = users.save( newUser );
+        Response res = new Response<User>(newUser);
+        try {
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e) {
+            throw new InternalServerErrorException("Error in processing response as a JSON");
         }
     }
+
+    @PostMapping("/api/login")
+    public void login(@RequestParam(value="username") String username,
+                      @RequestParam(value="password") String password){
+        if(username == null) {throw new BadRequestException( "username cannot be null" );}
+        if(password == null) {throw new BadRequestException( "password cannot be null" ); }
+
+
+
+    }
+
 
 }
 

@@ -21,7 +21,7 @@ public class User {
     String lastname;
 
     @NotNull
-    @Column
+    @Column(unique=true)
     String username;
 
     @NotNull
@@ -40,6 +40,11 @@ public class User {
     boolean isAdmin;
 
     public User() {
+    }
+
+    public User(String username, String password){
+        this.username = username ;
+        this.password = password;
     }
 
     public User(String firstname, String lastname, String username, String password, String email, String phone, boolean isAdmin) {
