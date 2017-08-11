@@ -42,11 +42,6 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password){
-        this.username = username ;
-        this.password = password;
-    }
-
     public User(String firstname, String lastname, String username, String password, String email, String phone, boolean isAdmin) {
         this.firstname = firstname;
         this.lastname = lastname;
