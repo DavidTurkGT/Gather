@@ -35,7 +35,7 @@ public class MainController {
 
     @PostConstruct
     public void init(){
-        if(users.count() == 0){
+        if(users.count() < 2){
             User testAdmin = new User("David","Turk","dtgt","pass","test@test.org","8675309",true);
             users.save(testAdmin);
             User testUser = new User("Cornbread", "Cat", "corn", "cat", "meow@cat.com", "8675309", false);
