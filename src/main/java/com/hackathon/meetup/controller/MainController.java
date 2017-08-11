@@ -54,6 +54,7 @@ public class MainController {
         System.out.println("Event: " + testEvent);
     }
 
+    @CrossOrigin
     @GetMapping("/")
     public String index(){
         return "You made it!";
@@ -74,6 +75,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/events")
     public String createNewEvent(@RequestBody NewEvent eventContainer,
                                  HttpSession session){
@@ -116,6 +118,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PutMapping("/api/events/{eventId}")
     public String modifyEvent(@PathVariable int eventId,
                               @RequestBody NewEvent reqEvent,
@@ -140,6 +143,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @DeleteMapping("/api/events/{eventId}")
     public void deleteEvent(@PathVariable int eventId){
         Event event = events.findOne(eventId);
@@ -147,6 +151,7 @@ public class MainController {
         events.delete(event);
     }
 
+    @CrossOrigin
     @PostMapping("/api/events/{eventId}/start")
     public String startEvent(@PathVariable int eventId){
         Event event = events.findOne(eventId);
@@ -161,6 +166,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/events/{eventId}/stop")
     public String stopEvent(@PathVariable int eventId){
         Event event = events.findOne(eventId);
@@ -175,6 +181,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/events/{eventId}/rsvp")
     public String rsvp(@PathVariable int eventId){
         return null;
@@ -196,6 +203,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/users/block/{userId}")
     public String blockUser(@PathVariable int userId){
         return null;
@@ -210,11 +218,13 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @DeleteMapping("/api/acquaintances/{acqId}")
     public String deleteAcquaintance(@PathVariable int acqId){
         return null;
     }
 
+    @CrossOrigin
     @PostMapping("/api/acquaintances/request/{userId}")
     public String requestAcquaintance(@PathVariable int userId){
         return null;
@@ -232,11 +242,13 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @PostMapping("/api/acquaintances/request/accept/{reqId}")
     public String acceptRequest(@PathVariable int reqId){
         return null;
     }
 
+    @CrossOrigin
     @DeleteMapping("/api/acquaintances/request/{reqId}")
     public String deleteRequest(@PathVariable int reqId){
         return null;
@@ -245,6 +257,7 @@ public class MainController {
     /**
      * Notes endpoints
      */
+    @CrossOrigin
     @PostMapping("/api/notes/{userId}")
     public String createNote(@PathVariable int userId){
         return null;
@@ -256,11 +269,13 @@ public class MainController {
         return null;
     }
 
+    @CrossOrigin
     @PutMapping("/api/notes/{noteId}")
     public String updateNote(@PathVariable int noteId){
         return null;
     }
 
+    @CrossOrigin
     @DeleteMapping("/api/notes/{noteId}")
     public String deleteNote(@PathVariable int noteId){
         return null;
@@ -272,7 +287,7 @@ public class MainController {
         return null;
     }
 
-
+    @CrossOrigin
     @PostMapping("/api/register")
     public String register(@RequestBody NewUser newUser){
         if(newUser.getFirstname() == null) {throw new BadRequestException( "First Name cannot be null" );}
@@ -297,6 +312,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/login")
     public void login(@RequestBody Login login, HttpSession session) {
         if (login.getUsername() == null || login.getUsername() == "") {
@@ -318,6 +334,7 @@ public class MainController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/api/logout")
     public void logout(HttpSession session){
         if(session.getAttribute("userId") == null){
