@@ -33,25 +33,25 @@ public class MainController {
     @Autowired
     EventRepo events;
 
-    @PostConstruct
-    public void init(){
-        if(users.count() == 0){
-            User testAdmin = new User("David","Turk","dtgt","pass","test@test.org","8675309",true);
-            users.save(testAdmin);
-            User testUser = new User("Cornbread", "Cat", "corn", "cat", "meow@cat.com", "8675309", false);
-            users.save(testUser);
-        }
-        User testAdmin = users.findAll().get(0);
-        System.out.println("Admin: " + testAdmin);
-        User testUser = users.findAll().get(1);
-        System.out.println("User: " + testUser);
-        if(events.count() == 0){
-            Event newEvent = new Event(testUser, "Test Event", "Moon","Creating things", new Date(), Status.NEW);
-            events.save(newEvent);
-        }
-        Event testEvent = events.findAll().get(0);
-        System.out.println("Event: " + testEvent);
-    }
+//    @PostConstruct
+//    public void init(){
+//        if(users.count() == 0){
+//            User testAdmin = new User("David","Turk","dtgt","pass","test@test.org","8675309",true);
+//            users.save(testAdmin);
+//            User testUser = new User("Cornbread", "Cat", "corn", "cat", "meow@cat.com", "8675309", false);
+//            users.save(testUser);
+//        }
+//        User testAdmin = users.findAll().get(0);
+//        System.out.println("Admin: " + testAdmin);
+//        User testUser = users.findAll().get(1);
+//        System.out.println("User: " + testUser);
+//        if(events.count() == 0){
+//            Event newEvent = new Event(testUser, "Test Event", "Moon","Creating things", new Date(), Status.NEW);
+//            events.save(newEvent);
+//        }
+//        Event testEvent = events.findAll().get(0);
+//        System.out.println("Event: " + testEvent);
+//    }
 
     @GetMapping("/")
     public String index(){
