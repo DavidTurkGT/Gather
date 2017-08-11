@@ -14,7 +14,6 @@ import com.hackathon.meetup.exceptions.InternalServerErrorException;
 import com.hackathon.meetup.exceptions.UnauthorizedException;
 import com.hackathon.meetup.repository.EventRepo;
 import com.hackathon.meetup.repository.UserRepo;
-import com.hackathon.meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +52,6 @@ public class MainController {
         Event testEvent = events.findAll().get(0);
         System.out.println("Event: " + testEvent);
     }
-
-    @Autowired
-    UserService userService;
 
     @GetMapping("/")
     public String index(){
