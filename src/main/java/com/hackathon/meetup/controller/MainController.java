@@ -76,7 +76,7 @@ public class MainController {
     public String createNewEvent(@RequestBody NewEvent eventContainer,
                                  HttpSession session){
         //TODO: Remove this when a session can be created
-        session.setAttribute("userId", 6);
+        session.setAttribute("userId", 1);
 //        if(date == null){ throw new BadRequestException("Event date cannot be null"); }
         User user = users.findOne((int) session.getAttribute("userId"));
         if(!user.isAdmin()){ throw new UnauthorizedException("User does not have admin privileges"); }
