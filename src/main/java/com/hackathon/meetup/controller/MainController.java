@@ -148,12 +148,30 @@ public class MainController {
 
     @PostMapping("/api/events/{eventId}/start")
     public String startEvent(@PathVariable int eventId){
-        return null;
+        Event event = events.findOne(eventId);
+        if(event == null){ throw new ContentNotFoundException("No event matching provided ID"); }
+        event.setStatus(Status.IN_PROGRESS);
+        event = events.save(event);
+        Response res = new Response<Event>(event);
+        try{
+            return objectMapper.writeValueAsString(res);
+        } catch(JsonProcessingException e){
+            throw new InternalServerErrorException("Error processing response as a JSON");
+        }
     }
 
     @PostMapping("/api/events/{eventId}/stop")
     public String stopEvent(@PathVariable int eventId){
-        return null;
+        Event event = events.findOne(eventId);
+        if(event == null){ throw new ContentNotFoundException("No event matching provided ID"); }
+        event.setStatus(Status.FINISHED);
+        event = events.save(event);
+        Response res = new Response<Event>(event);
+        try{
+            return objectMapper.writeValueAsString(res);
+        } catch (JsonProcessingException e){
+            throw new InternalServerErrorException("Error processing response to JSON");
+        }
     }
 
     @PostMapping("/api/events/{eventId}/rsvp")
