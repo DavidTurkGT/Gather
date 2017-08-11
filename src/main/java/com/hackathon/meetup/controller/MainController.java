@@ -140,8 +140,10 @@ public class MainController {
     }
 
     @DeleteMapping("/api/events/{eventId}")
-    public String deleteEvent(@PathVariable int eventId){
-        return null;
+    public void deleteEvent(@PathVariable int eventId){
+        Event event = events.findOne(eventId);
+        if(event == null){ throw new ContentNotFoundException("No event matching provided ID"); }
+        events.delete(event);
     }
 
     @PostMapping("/api/events/{eventId}/start")
