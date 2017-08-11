@@ -1,8 +1,8 @@
 package com.hackathon.meetup.controller;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackathon.meetup.containers.Login;
 import com.hackathon.meetup.containers.NewEvent;
 import com.hackathon.meetup.containers.NewUser;
 import com.hackathon.meetup.domain.Event;
@@ -246,20 +246,50 @@ public class MainController {
         if(newUser.getPassword() == null) {throw new BadRequestException( "Password cannot be null" );}
         if(newUser.getPhone() == null) {throw new BadRequestException( "Phone cannot be null" );}
 
+        User finduser = users.findUserByUsername( newUser.getUsername() ) ;
+
+        if(finduser != null){throw new BadRequestException( "UserName already exists");}
+
         User user = new User(newUser.getFirstname(), newUser.getLastname(), newUser.getUsername(), newUser.getPassword(),
                              newUser.getPhone(), newUser.getEmail(), newUser.isAdmin());
         users.save(user);
+
         try{
             Response res = new Response<User>(user);
             return objectMapper.writeValueAsString(res);
         } catch (JsonProcessingException e){
-            throw new InternalServerErrorException("Error processing response to JSON");
+            throw new InternalServerErrorException("Registration: Error processing response to JSON");
         }
-
     }
 
+    @PostMapping("/api/login")
+    public void login(@RequestBody Login login, HttpSession session) {
+        if (login.getUsername() == null || login.getUsername() == "") {
+            throw new BadRequestException( "First Name cannot be null" );
+        }
+        if (login.getPassword() == null || login.getPassword() == "") {
+            throw new BadRequestException( "Last Name cannot be null" );
+        }
 
+        User user = users.findUserByUsername( login.getUsername() );
 
+        if(user == null){ throw new UnauthorizedException("No user with the username"); }
 
+        if(user.getUsername().equals(login.getUsername()) && user.getPassword().equals(login.getPassword())){
+            session.setAttribute("userId", user.getUserid());
+        }
+        else{
+            throw new UnauthorizedException("Invalid username/password combination");
+        }
+    }
+
+    @PostMapping("/api/logout")
+    public void logout(HttpSession session){
+        if(session.getAttribute("userId") == null){
+            throw new BadRequestException( "Session not found" );
+        }else{
+           session.setAttribute( "userId", null );
+        }
+    }
 }
 
