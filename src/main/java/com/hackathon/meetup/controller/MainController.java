@@ -61,6 +61,7 @@ public class MainController {
     /**
      * Events endpoints
      */
+    @CrossOrigin(origins = "https://cors-anywhere.herokluapp.com/")
     @GetMapping("/api/events")
     public String getAllEvents(){
         try {
