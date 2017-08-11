@@ -1,7 +1,5 @@
 package com.hackathon.meetup.domain;
 
-import com.sun.istack.internal.Nullable;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
